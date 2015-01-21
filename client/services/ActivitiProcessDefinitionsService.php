@@ -19,11 +19,11 @@ class ActivitiProcessDefinitionsService extends ActivitiService
 	 * @return ActivitiListOfProcessDefinitionsResponse
 	 * @see {@link http://www.activiti.org/userguide/#N1362B List of process definitions}
 	 */
-	public function listOfProcessDefinitions()
+	public function listOfProcessDefinitions($size = 30, $start = 0)
 	{
 		$data = array();
 		
-		return $this->client->request("repository/process-definitions", 'GET', $data, array(200), array(400 => "Indicates a parameter was passed in the wrong format or that 'latest' is used with other parameters other than 'key' and 'keyLike'. The status-message contains additional information."), 'ActivitiListOfProcessDefinitionsResponse');
+		return $this->client->request("repository/process-definitions?start=$start&size=$size", 'GET', $data, array(200), array(400 => "Indicates a parameter was passed in the wrong format or that 'latest' is used with other parameters other than 'key' and 'keyLike'. The status-message contains additional information."), 'ActivitiListOfProcessDefinitionsResponse');
 	}
 	
 	/**
