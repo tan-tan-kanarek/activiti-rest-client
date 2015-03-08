@@ -35,6 +35,11 @@ abstract class ActivitiClientBase
 		$this->buildUrl();
 	}
 	
+	public function getUrl()
+	{
+		return $this->url;
+	}
+	
 	public function setDebug($debug)
 	{
 		$this->debug = $debug;
@@ -137,8 +142,10 @@ abstract class ActivitiClientBase
 					curl_setopt($c, CURLOPT_INFILE, $f);
 					curl_setopt($c, CURLOPT_INFILESIZE, strlen($content));
 				}
-				
 				break;
+			
+			default:
+				curl_setopt($c, CURLOPT_CUSTOMREQUEST, $method);
 		}
 
 		curl_setopt($c, CURLOPT_URL, $url);
@@ -202,11 +209,17 @@ abstract class ActivitiClientBase
 		}
 		
 		if(in_array($status, $expectedHttpCodes))
-		{
+		{	
+			$response = implode("\r\n", $content);
 			if(!trim($response))
 				return;
-				
-			$response = json_decode(implode("\n", $content));
+		
+			if($returnType == 'string')
+			{
+				return $response;
+			}
+			
+			$response = json_decode($response);
 			if($returnType)
 			{
 				if($isArray)
